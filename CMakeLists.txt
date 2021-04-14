@@ -3,4 +3,4 @@ project(Assingment3Partb C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(Assingment3Partb struct_types.h DB_editor.c)
+add_executable(Assingment3Partb struct_types.h ATM.c)

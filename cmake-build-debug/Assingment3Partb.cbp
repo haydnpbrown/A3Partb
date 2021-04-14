@@ -76,7 +76,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/chase/Documents/GitHub/A3Partb/DB_editor.c">
+		<Unit filename="/home/chase/Documents/GitHub/A3Partb/ATM.c">
 			<Option target="Assingment3Partb"/>
 		</Unit>
 		<Unit filename="/home/chase/Documents/GitHub/A3Partb/struct_types.h">

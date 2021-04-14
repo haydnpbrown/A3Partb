@@ -13,7 +13,7 @@ struct db_item{
 
 struct messages {
     long int message_type;
-    char *msg_type;
+    int msg_type;
     struct db_item contents;
 };
 
