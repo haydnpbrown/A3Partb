@@ -17,16 +17,8 @@ void appendItem(struct db_item itemToAppend){
         printf("error opening the db file for appending \n");
         exit(1);
     }
-    char str[100];
-    strcpy(str, itemToAppend.acc_num);
-    strcpy(str, ",";
-    strcpy(str, itemToAppend.pin);
-    strcpy(str, ",");
-    char temp[15];
-    strcpy(str, itemToAppend.acc_num);
-    sprintf(temp, "%f", itemToAppend.funds);
-    strcpy(str, temp);
-    fprintf(dbfile, "%s");
+    fprintf(dbfile, "\n%s, %s, %f", itemToAppend.acc_num, itemToAppend.pin, itemToAppend.funds);
+    fclose(dbfile);
 }
 
 
@@ -45,9 +37,9 @@ struct db_item getItem(char *acc){
         char *token = strtok(str, ",");
         if (strcmp(acc, token) == 0){
             //this entry matches the acc number
-            temp_item.acc_num = token;
+            strcpy(temp_item.acc_num, token);
             token = strtok(NULL, ",");
-            temp_item.pin = token;
+            strcpy(temp_item.pin, token);
             token = strtok(NULL, ",");
             temp_item.funds = atof(token);
             found = 1;
@@ -56,7 +48,7 @@ struct db_item getItem(char *acc){
     }
 
     if (found != 1){
-        temp_item.acc_num = "0";
+        strcpy(temp_item.acc_num, "0");
     }
     return temp_item;
 }
@@ -74,6 +66,11 @@ int main() {
     int pin_count = 0; //tracks the number of consecutive wrong pin entries
     pid_t pid;
 
+    //delete the msg queue is it exists
+    if (msgctl(msgget((key_t)1111, 0666 | IPC_CREAT), IPC_RMID, 0) == -1){
+        printf("error closing the msg queue \n");
+        exit(EXIT_FAILURE);
+    }
 
     //create inbound msg queue
     inmsgq = msgget((key_t)1111, 0666 | IPC_CREAT);
@@ -98,8 +95,9 @@ int main() {
             exit(EXIT_FAILURE);
         }
         current_acc = current_msg.contents;
+        printf("receiving msg \n");
 
-        if (strcmp(current_msg.msg_type, "PIN") == 0){
+        if (current_msg.msg_type == 1){
             //search file for acc num
             /*
              * acc # found
@@ -110,7 +108,7 @@ int main() {
             db_acc = getItem(current_acc.acc_num);
             if (strcmp(db_acc.acc_num, "0") == 0){
                 //the account number is not in the db, return PIN_WRONG
-                current_msg.msg_type = "PIN_WRONG";
+                current_msg.msg_type = 5;
                 current_msg.message_type = 1;
                 //send msg to ATM, message_type = 1
                 if (msgsnd(outmsgq, (void *)&current_msg, sizeof(struct messages), 0) == -1){
@@ -124,7 +122,7 @@ int main() {
                 sprintf(temp, "%d", temp_encode);
                 if (strcmp(db_acc.pin, temp) == 0){
                     //the pins match, return a success message
-                    current_msg.msg_type = "PIN_WRONG";
+                    current_msg.msg_type = 5;
                     current_msg.message_type = 1;
                     //send msg to ATM, message_type = 1
                     if (msgsnd(outmsgq, (void *)&current_msg, sizeof(struct messages), 0) == -1){
@@ -140,7 +138,7 @@ int main() {
                     } else {
                         //increment the # of tries and return a failure message
                         pin_count++;
-                        current_msg.msg_type = "PIN_WRONG";
+                        current_msg.msg_type = 5;
                         current_msg.message_type = 1;
                         //send msg to ATM, message_type = 1
                         if (msgsnd(outmsgq, (void *)&current_msg, sizeof(struct messages), 0) == -1){
@@ -150,12 +148,17 @@ int main() {
                     }
                 }
             }
-        } else if (strcmp(current_msg.msg_type, "WITHDRAW") == 0){
+        } else if (current_msg.msg_type == 2){
 
-        } else if (strcmp(current_msg.msg_type, "BALANCE") == 0){
+        } else if (current_msg.msg_type == 3){
 
-        } else if (strcmp(current_msg.msg_type, "UPDATE_DB") == 0){
-
+        } else if (current_msg.msg_type == 4){
+            printf("update db request being handled \n");
+            int temp_encode = atoi(current_acc.pin) + 1; //encode the pin number
+            char temp[4];
+            sprintf(temp, "%d", temp_encode); //cast pin back to chars
+            strcpy(current_acc.pin, temp);
+            appendItem(current_acc); //append the db_item object to the database
         }
     }
 

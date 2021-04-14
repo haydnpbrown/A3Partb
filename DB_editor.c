@@ -38,7 +38,7 @@ int main(){
         fgets(tempFunds, 100, stdin);
 
         current_acc.funds = (float) strtod(tempFunds, NULL);
-        
+
         msg.message_type = 1;
         msg.msg_type = 4;
         msg.contents = current_acc;
@@ -48,7 +48,7 @@ int main(){
             exit(EXIT_FAILURE);
         }
 
-        printf("Account added to Database\\n");
+        printf("Account added to Database \n");
     }
 }
 
