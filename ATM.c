@@ -99,7 +99,9 @@ int main(){
        }
 
         printf("Enter Banking Operations (BALANCE): \n");
-        fgets(msg.msg_type, 10, stdin);
+        char temp[10];
+        fgets(temp, 10, stdin);
+        msg.msg_type = atoi(temp);
 
         //Send message to server
         if(msgsnd(msgqidsend, (void *)&msg, sizeof(struct messages), 0) == -1){
@@ -113,7 +115,7 @@ int main(){
             exit(1);
         }
 
-        printf("Account Balance: %d", msg.contents.funds);
+        printf("Account Balance: %f", msg.contents.funds);
 
         // DIDNT IMPLEMENT WITHDRAW, SORRY :/
     }
