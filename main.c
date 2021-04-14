@@ -9,6 +9,9 @@
 #include <sys/msg.h>
 #include "struct_types.h"
 
+/*
+ * append an account entry to the end of the database given a db_item
+ */
 void appendItem(struct db_item itemToAppend){
     FILE *dbfile;
     char *filename = "db.txt";
@@ -21,7 +24,9 @@ void appendItem(struct db_item itemToAppend){
     fclose(dbfile);
 }
 
-
+/*
+ * return a db_item object given an account number to search for
+ */
 struct db_item getItem(char *acc){
     int found = 0;
     FILE *dbfile;
@@ -86,8 +91,6 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    //fork here to create the db editor process
-
     //wait for messages forever
     while(running){
         if (msgrcv(inmsgq, (void *)&current_msg, sizeof(struct messages), 0, 0) == -1){
@@ -149,10 +152,21 @@ int main() {
                 }
             }
         } else if (current_msg.msg_type == 2){
-
+            /*
+             * this is a BALANCE request from the atm. The currently accessed acc from the db should be stored in
+             * current_acc. Return the funds field from here to the ATM
+             */
         } else if (current_msg.msg_type == 3){
-
+            /*
+             * WITHDRAW request from the ATM. The current account is stored locally, so check its funds to see
+             * if the request amount can be withdrawn. If it can, do so. If the account does not have enough funds
+             * for the operation then notify the ATM.
+             */
         } else if (current_msg.msg_type == 4){
+            /*
+             * This is an UPDATE_DB request from the db editor. We first need to encrypt the user pin before
+             * appending the request to the database.
+             */
             printf("update db request being handled \n");
             int temp_encode = atoi(current_acc.pin) + 1; //encode the pin number
             char temp[4];
