@@ -1,4 +1,8 @@
 /snap/clion/149/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/haydn/CLionProjects/A3Partb
--- Configuring done
--- Generating done
--- Build files have been written to: /home/haydn/CLionProjects/A3Partb/cmake-build-debug
+CMake Error at CMakeLists.txt:6:
+  Parse error.  Expected a command name, got unquoted argument with text
+  "<<<<<<<".
+
+
+-- Configuring incomplete, errors occurred!
+See also "/home/haydn/CLionProjects/A3Partb/cmake-build-debug/CMakeFiles/CMakeOutput.log".
