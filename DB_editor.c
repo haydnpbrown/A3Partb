@@ -38,7 +38,7 @@ int main(){
         fgets(tempFunds, 100, stdin);
 
         current_acc.funds = (float) strtod(tempFunds, NULL);
-        
+
         msg.message_type = 1;
         msg.msg_type = "UPDATE_DB";
         msg.contents = current_acc;

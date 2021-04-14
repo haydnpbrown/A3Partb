@@ -17,16 +17,17 @@ void appendItem(struct db_item itemToAppend){
         printf("error opening the db file for appending \n");
         exit(1);
     }
-    char str[100];
+    char str[500];
     strcpy(str, itemToAppend.acc_num);
-    strcpy(str, ",";
+    strcpy(str, ",");
     strcpy(str, itemToAppend.pin);
     strcpy(str, ",");
     char temp[15];
     strcpy(str, itemToAppend.acc_num);
     sprintf(temp, "%f", itemToAppend.funds);
     strcpy(str, temp);
-    fprintf(dbfile, "%s");
+    fprintf(dbfile, "%s\n", str);
+    fclose(dbfile);
 }
 
 
@@ -45,9 +46,9 @@ struct db_item getItem(char *acc){
         char *token = strtok(str, ",");
         if (strcmp(acc, token) == 0){
             //this entry matches the acc number
-            temp_item.acc_num = token;
+            strcpy(temp_item.acc_num, token);
             token = strtok(NULL, ",");
-            temp_item.pin = token;
+            strcpy(temp_item.pin, token);
             token = strtok(NULL, ",");
             temp_item.funds = atof(token);
             found = 1;
@@ -56,7 +57,7 @@ struct db_item getItem(char *acc){
     }
 
     if (found != 1){
-        temp_item.acc_num = "0";
+        strcpy(temp_item.acc_num, "0");
     }
     return temp_item;
 }
@@ -74,6 +75,11 @@ int main() {
     int pin_count = 0; //tracks the number of consecutive wrong pin entries
     pid_t pid;
 
+    //delete the msg queue is it exists
+    if (msgctl(msgget((key_t)1111, 0666 | IPC_CREAT), IPC_RMID, 0) == -1){
+        printf("error closing the msg queue \n");
+        exit(EXIT_FAILURE);
+    }
 
     //create inbound msg queue
     inmsgq = msgget((key_t)1111, 0666 | IPC_CREAT);
@@ -155,7 +161,12 @@ int main() {
         } else if (strcmp(current_msg.msg_type, "BALANCE") == 0){
 
         } else if (strcmp(current_msg.msg_type, "UPDATE_DB") == 0){
-
+            current_acc = current_msg.contents;
+            int temp_encode = atoi(current_acc.pin) + 1; //encode the pin number
+            char temp[4];
+            sprintf(temp, "%d", temp_encode); //cast pin back to chars
+            strcpy(current_acc.pin, temp);
+            appendItem(current_acc); //append the db_item object to the database
         }
     }
 
