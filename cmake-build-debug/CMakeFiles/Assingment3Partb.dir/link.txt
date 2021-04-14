@@ -1,1 +1,1 @@
-/usr/bin/cc -g CMakeFiles/Assingment3Partb.dir/DB_editor.c.o -o Assingment3Partb 
+/usr/bin/cc -g CMakeFiles/Assingment3Partb.dir/ATM.c.o -o Assingment3Partb 

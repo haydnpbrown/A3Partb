@@ -67,10 +67,10 @@ RM = /snap/clion/149/bin/cmake/linux/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/chase/Documents/GitHub/A3Partb
+CMAKE_SOURCE_DIR = /home/haydn/CLionProjects/A3Partb
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/chase/Documents/GitHub/A3Partb/cmake-build-debug
+CMAKE_BINARY_DIR = /home/haydn/CLionProjects/A3Partb/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -99,9 +99,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/chase/Documents/GitHub/A3Partb/cmake-build-debug/CMakeFiles /home/chase/Documents/GitHub/A3Partb/cmake-build-debug//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/haydn/CLionProjects/A3Partb/cmake-build-debug/CMakeFiles /home/haydn/CLionProjects/A3Partb/cmake-build-debug//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/chase/Documents/GitHub/A3Partb/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/haydn/CLionProjects/A3Partb/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -142,32 +142,32 @@ Assingment3Partb/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/build
 .PHONY : Assingment3Partb/fast
 
-DB_editor.o: DB_editor.c.o
+ATM.o: ATM.c.o
 
-.PHONY : DB_editor.o
+.PHONY : ATM.o
 
 # target to build an object file
-DB_editor.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/DB_editor.c.o
-.PHONY : DB_editor.c.o
+ATM.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/ATM.c.o
+.PHONY : ATM.c.o
 
-DB_editor.i: DB_editor.c.i
+ATM.i: ATM.c.i
 
-.PHONY : DB_editor.i
+.PHONY : ATM.i
 
 # target to preprocess a source file
-DB_editor.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/DB_editor.c.i
-.PHONY : DB_editor.c.i
+ATM.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/ATM.c.i
+.PHONY : ATM.c.i
 
-DB_editor.s: DB_editor.c.s
+ATM.s: ATM.c.s
 
-.PHONY : DB_editor.s
+.PHONY : ATM.s
 
 # target to generate assembly for a file
-DB_editor.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/DB_editor.c.s
-.PHONY : DB_editor.c.s
+ATM.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/ATM.c.s
+.PHONY : ATM.c.s
 
 # Help Target
 help:
@@ -178,9 +178,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Assingment3Partb"
-	@echo "... DB_editor.o"
-	@echo "... DB_editor.i"
-	@echo "... DB_editor.s"
+	@echo "... ATM.o"
+	@echo "... ATM.i"
+	@echo "... ATM.s"
 .PHONY : help
 
 
