@@ -40,7 +40,7 @@ int main(){
         current_acc.funds = (float) strtod(tempFunds, NULL);
 
         msg.message_type = 1;
-        msg.msg_type = "UPDATE_DB";
+        msg.msg_type = 4;
         msg.contents = current_acc;
 
         if(msgsnd(msgqid, (void *)&msg, sizeof(struct messages), 0) == -1){
@@ -48,7 +48,7 @@ int main(){
             exit(EXIT_FAILURE);
         }
 
-        printf("Account added to Database\\n");
+        printf("Account added to Database \n");
     }
 }
 
