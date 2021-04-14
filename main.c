@@ -9,6 +9,27 @@
 #include <sys/msg.h>
 #include "struct_types.h"
 
+void appendItem(struct db_item itemToAppend){
+    FILE *dbfile;
+    char *filename = "db.txt";
+    dbfile = fopen(filename, "a");
+    if(dbfile == NULL){
+        printf("error opening the db file for appending \n");
+        exit(1);
+    }
+    char str[100];
+    strcpy(str, itemToAppend.acc_num);
+    strcpy(str, ",";
+    strcpy(str, itemToAppend.pin);
+    strcpy(str, ",");
+    char temp[15];
+    strcpy(str, itemToAppend.acc_num);
+    sprintf(temp, "%f", itemToAppend.funds);
+    strcpy(str, temp);
+    fprintf(dbfile, "%s");
+}
+
+
 struct db_item getItem(char *acc){
     int found = 0;
     FILE *dbfile;

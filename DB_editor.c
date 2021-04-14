@@ -44,7 +44,7 @@ int main(){
 //        printf("Balance: %f\n", current_acc.funds);
 
 
-        msg.message_type = 0;
+        msg.message_type = 1;
         msg.msg_type = "UPDATE_DB";
         msg.contents = current_acc;
 
