@@ -1,1 +1,1 @@
-/usr/bin/cc -g CMakeFiles/Assingment3Partb.dir/main.c.o CMakeFiles/Assingment3Partb.dir/test.c.o -o Assingment3Partb 
+/usr/bin/cc -g CMakeFiles/Assingment3Partb.dir/ATM.c.o -o Assingment3Partb 

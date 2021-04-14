@@ -142,59 +142,32 @@ Assingment3Partb/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/build
 .PHONY : Assingment3Partb/fast
 
-main.o: main.c.o
+ATM.o: ATM.c.o
 
-.PHONY : main.o
-
-# target to build an object file
-main.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/main.c.o
-.PHONY : main.c.o
-
-main.i: main.c.i
-
-.PHONY : main.i
-
-# target to preprocess a source file
-main.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/main.c.i
-.PHONY : main.c.i
-
-main.s: main.c.s
-
-.PHONY : main.s
-
-# target to generate assembly for a file
-main.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/main.c.s
-.PHONY : main.c.s
-
-test.o: test.c.o
-
-.PHONY : test.o
+.PHONY : ATM.o
 
 # target to build an object file
-test.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/test.c.o
-.PHONY : test.c.o
+ATM.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/ATM.c.o
+.PHONY : ATM.c.o
 
-test.i: test.c.i
+ATM.i: ATM.c.i
 
-.PHONY : test.i
+.PHONY : ATM.i
 
 # target to preprocess a source file
-test.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/test.c.i
-.PHONY : test.c.i
+ATM.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/ATM.c.i
+.PHONY : ATM.c.i
 
-test.s: test.c.s
+ATM.s: ATM.c.s
 
-.PHONY : test.s
+.PHONY : ATM.s
 
 # target to generate assembly for a file
-test.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/test.c.s
-.PHONY : test.c.s
+ATM.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/ATM.c.s
+.PHONY : ATM.c.s
 
 # Help Target
 help:
@@ -205,12 +178,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Assingment3Partb"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
-	@echo "... test.o"
-	@echo "... test.i"
-	@echo "... test.s"
+	@echo "... ATM.o"
+	@echo "... ATM.i"
+	@echo "... ATM.s"
 .PHONY : help
 
 
