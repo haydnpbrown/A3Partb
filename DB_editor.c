@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/msg.h>
+#include <unistd.h>
 #include "struct_types.h"
 
 #define MAX_TEXT 100000
@@ -37,13 +38,7 @@ int main(){
         fgets(tempFunds, 100, stdin);
 
         current_acc.funds = (float) strtod(tempFunds, NULL);
-
-//        printf("Summary of entered values\n");
-//        printf("Account #: %s\n", current_acc.acc_num);
-//        printf("Pin: %s\n", current_acc.pin);
-//        printf("Balance: %f\n", current_acc.funds);
-
-
+        
         msg.message_type = 1;
         msg.msg_type = "UPDATE_DB";
         msg.contents = current_acc;
@@ -52,6 +47,8 @@ int main(){
             printf("error sending message");
             exit(EXIT_FAILURE);
         }
+
+        printf("Account added to Database\\n");
     }
 }
 
