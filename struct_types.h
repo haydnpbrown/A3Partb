@@ -6,8 +6,8 @@
 #define ASSINGMENT3PARTB_STRUCT_TYPES_H
 
 struct db_item{
-    char acc_num[5];
-    char pin[3];
+    char acc_num[6];
+    char pin[4];
     float funds;
 };
 
