@@ -63,10 +63,10 @@ RM = /snap/clion/149/bin/cmake/linux/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/haydn/CLionProjects/A3Partb
+CMAKE_SOURCE_DIR = /home/chase/Documents/GitHub/A3Partb
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/haydn/CLionProjects/A3Partb/cmake-build-debug
+CMAKE_BINARY_DIR = /home/chase/Documents/GitHub/A3Partb/cmake-build-debug
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -93,14 +93,14 @@ clean: CMakeFiles/Assingment3Partb.dir/clean
 CMakeFiles/Assingment3Partb.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/haydn/CLionProjects/A3Partb/cmake-build-debug/CMakeFiles --progress-num=1,2,3 "Built target Assingment3Partb"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/chase/Documents/GitHub/A3Partb/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target Assingment3Partb"
 .PHONY : CMakeFiles/Assingment3Partb.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Assingment3Partb.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/haydn/CLionProjects/A3Partb/cmake-build-debug/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/chase/Documents/GitHub/A3Partb/cmake-build-debug/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/Assingment3Partb.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/haydn/CLionProjects/A3Partb/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/chase/Documents/GitHub/A3Partb/cmake-build-debug/CMakeFiles 0
 .PHONY : CMakeFiles/Assingment3Partb.dir/rule
 
 # Convenience name for target.
