@@ -42,7 +42,7 @@ int main(){
 
         msg.message_type = 1;
         msg.contents = current_acc;
-        msg.msg_type = 1;
+        msg.msg_type = PIN;
 
         //send message to server
         if(msgsnd(msgqidsend, (void *)&msg, sizeof(struct messages), 0) == -1){
@@ -56,8 +56,10 @@ int main(){
             exit(1);
         }
 
+        printf()
+
         //If pin is wrong (5 = PING_WRONG)
-       if(msg.msg_type == 5){
+       if(msg.msg_type == PIN_WRONG){
            for(int i = 0; i < 3; i++){
 
                printf("pin wrong %d re-enter pin", i + 1);
@@ -68,7 +70,7 @@ int main(){
 
                msg.message_type = 1;
                msg.contents = current_acc;
-               msg.msg_type = 2;
+               msg.msg_type = PIN;
 
                //send pin again
                if(msgsnd(msgqidsend, (void *)&msg, sizeof(struct messages), 0) == -1){
@@ -83,12 +85,12 @@ int main(){
                }
 
                //break is pin is correct (6 = OK)
-               if (msg.msg_type == 6) {
+               if (msg.msg_type == OK) {
                    break;
                }
            }
            //break is pin is correct (6 = OK)
-           if (msg.msg_type == 6) {
+           if (msg.msg_type == OK) {
                break;
            }
            //EXIT and block account because pin was wrong 3 times
@@ -101,7 +103,7 @@ int main(){
         printf("Enter Banking Operations (BALANCE): \n");
         char temp[10];
         fgets(temp, 10, stdin);
-        msg.msg_type = atoi(temp);
+        msg.msg_type = BALANCE;
 
         //Send message to server
         if(msgsnd(msgqidsend, (void *)&msg, sizeof(struct messages), 0) == -1){
