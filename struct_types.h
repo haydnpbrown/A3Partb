@@ -8,8 +8,8 @@
 enum messagetype {PIN, BALANCE, WITHDRAW, UPDATE_DB, PIN_WRONG, OK};
 
 struct db_item{
-    char acc_num[6];
-    char pin[4];
+    char acc_num[10];
+    char pin[10];
     float funds;
 };
 

@@ -20,7 +20,8 @@ void appendItem(struct db_item itemToAppend){
         printf("error opening the db file for appending \n");
         exit(1);
     }
-    fprintf(dbfile, "\n%s, %s, %f", itemToAppend.acc_num, itemToAppend.pin, itemToAppend.funds);
+    printf("The entry to append: %s,%s,%f \n", itemToAppend.acc_num, itemToAppend.pin, itemToAppend.funds);
+    fprintf(dbfile, "\n%s,%s,%f", itemToAppend.acc_num, itemToAppend.pin, itemToAppend.funds);
     fclose(dbfile);
 }
 
