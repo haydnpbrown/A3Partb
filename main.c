@@ -100,7 +100,7 @@ int main() {
         current_acc = current_msg.contents;
         printf("receiving msg \n");
 
-        if (current_msg.msg_type == 1){
+        if (current_msg.msg_type == PIN){
             //search file for acc num
             /*
              * acc # found
@@ -111,7 +111,7 @@ int main() {
             db_acc = getItem(current_acc.acc_num);
             if (strcmp(db_acc.acc_num, "0") == 0){
                 //the account number is not in the db, return PIN_WRONG
-                current_msg.msg_type = 5;
+                current_msg.msg_type = PIN_WRONG;
                 current_msg.message_type = 1;
                 //send msg to ATM, message_type = 1
                 if (msgsnd(outmsgq, (void *)&current_msg, sizeof(struct messages), 0) == -1){
@@ -125,7 +125,7 @@ int main() {
                 sprintf(temp, "%d", temp_encode);
                 if (strcmp(db_acc.pin, temp) == 0){
                     //the pins match, return a success message
-                    current_msg.msg_type = 5;
+                    current_msg.msg_type = OK;
                     current_msg.message_type = 1;
                     //send msg to ATM, message_type = 1
                     if (msgsnd(outmsgq, (void *)&current_msg, sizeof(struct messages), 0) == -1){
@@ -141,7 +141,7 @@ int main() {
                     } else {
                         //increment the # of tries and return a failure message
                         pin_count++;
-                        current_msg.msg_type = 5;
+                        current_msg.msg_type = PIN_WRONG;
                         current_msg.message_type = 1;
                         //send msg to ATM, message_type = 1
                         if (msgsnd(outmsgq, (void *)&current_msg, sizeof(struct messages), 0) == -1){
@@ -151,18 +151,18 @@ int main() {
                     }
                 }
             }
-        } else if (current_msg.msg_type == 2){
+        } else if (current_msg.msg_type == BALANCE){
             /*
              * this is a BALANCE request from the atm. The currently accessed acc from the db should be stored in
              * current_acc. Return the funds field from here to the ATM
              */
-        } else if (current_msg.msg_type == 3){
+        } else if (current_msg.msg_type == WITHDRAW){
             /*
              * WITHDRAW request from the ATM. The current account is stored locally, so check its funds to see
              * if the request amount can be withdrawn. If it can, do so. If the account does not have enough funds
              * for the operation then notify the ATM.
              */
-        } else if (current_msg.msg_type == 4){
+        } else if (current_msg.msg_type == UPDATE_DB){
             /*
              * This is an UPDATE_DB request from the db editor. We first need to encrypt the user pin before
              * appending the request to the database.

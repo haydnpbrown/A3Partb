@@ -5,6 +5,8 @@
 #ifndef ASSINGMENT3PARTB_STRUCT_TYPES_H
 #define ASSINGMENT3PARTB_STRUCT_TYPES_H
 
+enum messagetype {PIN, BALANCE, WITHDRAW, UPDATE_DB, PIN_WRONG, OK};
+
 struct db_item{
     char acc_num[6];
     char pin[4];
@@ -13,7 +15,7 @@ struct db_item{
 
 struct messages {
     long int message_type;
-    int msg_type;
+    enum messagetype msg_type;
     struct db_item contents;
 };
 
