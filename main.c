@@ -100,6 +100,7 @@ int main() {
         }
         current_acc = current_msg.contents;
         printf("receiving msg \n");
+        printf("db item received: %s,%s,%f", current_acc.acc_num, current_acc.pin, current_acc.funds);
 
         if (current_msg.msg_type == PIN){
             //search file for acc num

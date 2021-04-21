@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <stdlib.h>
 #include <sys/msg.h>
+#include <string.h>
 #include "struct_types.h"
 
 int main(){
@@ -31,14 +32,16 @@ int main(){
 
     while(1) {
         printf("Enter Account Number :\n");
-        fgets(current_acc.acc_num, 10, stdin);
+        fgets(current_acc.acc_num, 15, stdin);
+        current_acc.acc_num[strcspn(current_acc.acc_num, "\n")] = 0;
 
         if(current_acc.acc_num == "X"){ //exit iff account number entered is X
             exit(1);
         }
 
         printf("Enter pin :\n");
-        fgets(current_acc.pin, 10, stdin);
+        fgets(current_acc.pin, 15, stdin);
+        current_acc.pin[strcspn(current_acc.pin, "\n")] = 0;
 
         msg.message_type = 1;
         msg.contents = current_acc;
@@ -56,7 +59,6 @@ int main(){
             exit(1);
         }
 
-        printf()
 
         //If pin is wrong (5 = PING_WRONG)
        if(msg.msg_type == PIN_WRONG){
