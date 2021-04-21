@@ -125,9 +125,11 @@ int main(){
                 char withdraw[100];
                 fgets(withdraw, 10, stdin);
                 withdraw[strcspn(current_acc.acc_num, "\n")] = 0;
+                printf("Amount to withdraw %s\n", withdraw);
 
                 msg.msg_type = WITHDRAW;
-                msg.contents.funds = (float) strtod(withdraw, NULL);
+                current_acc.funds = (float) strtod(withdraw, NULL);
+                msg.contents = current_acc;
             }
 
 
@@ -144,9 +146,9 @@ int main(){
             }
 
             if(op == 1){
-                printf("Account Balance: %f", msg.contents.funds);
+                printf("Account Balance: %f\n\n", msg.contents.funds);
             }else if(op == 2){
-                printf("Account Balance after Withdrawal: %f", msg.contents.funds);
+                printf("Account Balance after Withdrawal: %f\n\n", msg.contents.funds);
             }
         }
     }
