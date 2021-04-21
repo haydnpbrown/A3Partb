@@ -9,6 +9,8 @@
 #include <sys/msg.h>
 #include "struct_types.h"
 
+#define MAX 256
+
 /*
  * append an account entry to the end of the database given a db_item
  */
@@ -57,6 +59,45 @@ struct db_item getItem(char *acc){
         strcpy(temp_item.acc_num, "0");
     }
     return temp_item;
+}
+
+void replaceItem(struct db_item itemToReplace){
+    FILE *dbfile;
+    FILE *dbfile2;
+    char str[MAX];
+    char str2[MAX];
+    char *filename = "db.txt";
+    char *tempname = "temp.txt";
+    dbfile = fopen(filename, "r");
+    if(dbfile == NULL){
+        printf("error opening the db file for reading \n");
+        exit(1);
+    }
+    dbfile2 = fopen(tempname, "w");
+    if(dbfile2 == NULL){
+        printf("error opening the db file for writing \n");
+        exit(1);
+    }
+
+    while(!feof(dbfile)){
+        strcpy(str, "\0");
+        strcpy(str2, "\0");
+        fgets(str, MAX, dbfile);
+        str[strcspn(str, "\n")] = 0;
+        strcpy(str2, str);
+        char *token = strtok(str, ",");
+        if (strcmp(token, itemToReplace.acc_num) == 0){
+            //this is the line to replace
+            fprintf(dbfile2, "%s,%s,fd\n", itemToReplace.acc_num, itemToReplace.pin, itemToReplace.funds);
+        } else {
+            //copy the line from old to new file
+            fprintf(dbfile2, "%s\n", str2);
+        }
+    }
+    fclose(dbfile);
+    fclose(dbfile2);
+    remove(filename);
+    rename(tempname, filename);
 }
 
 
@@ -172,9 +213,24 @@ int main() {
              * for the operation then notify the ATM.
              */
             if ((db_acc.funds - current_acc.funds) >= 0){
-                //we are able to withdraw
+                current_acc.funds = db_acc.funds - current_acc.funds;
+                replaceItem(current_acc);
+                current_msg.msg_type = FUNDS_OK;
+                current_msg.message_type = 1;
+                current_msg.contents = current_acc;
+                if (msgsnd(outmsgq, (void *)&current_msg, sizeof(struct messages), 0) == -1){
+                    printf("error sending msg to atm");
+                    exit(EXIT_FAILURE);
+                }
             } else {
                 //unable to withdraw the specified amount
+                current_msg.msg_type = NSF;
+                current_msg.message_type = 1;
+                current_msg.contents = current_acc;
+                if (msgsnd(outmsgq, (void *)&current_msg, sizeof(struct messages), 0) == -1){
+                    printf("error sending msg to atm");
+                    exit(EXIT_FAILURE);
+                }
             }
         } else if (current_msg.msg_type == UPDATE_DB){
             /*
