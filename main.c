@@ -100,7 +100,7 @@ int main() {
         }
         current_acc = current_msg.contents;
         printf("receiving msg \n");
-        printf("db item received: %s,%s,%f", current_acc.acc_num, current_acc.pin, current_acc.funds);
+        printf("db item received: %s,%s,%f\n", current_acc.acc_num, current_acc.pin, current_acc.funds);
 
         if (current_msg.msg_type == PIN){
             //search file for acc num
@@ -158,12 +158,24 @@ int main() {
              * this is a BALANCE request from the atm. The currently accessed acc from the db should be stored in
              * current_acc. Return the funds field from here to the ATM
              */
+            current_msg.msg_type = BALANCE;
+            current_msg.message_type = 1;
+            current_msg.contents = db_acc; //the currently accessed account is already in db_acc
+            if (msgsnd(outmsgq, (void *)&current_msg, sizeof(struct messages), 0) == -1){
+                printf("error sending msg to atm");
+                exit(EXIT_FAILURE);
+            }
         } else if (current_msg.msg_type == WITHDRAW){
             /*
              * WITHDRAW request from the ATM. The current account is stored locally, so check its funds to see
              * if the request amount can be withdrawn. If it can, do so. If the account does not have enough funds
              * for the operation then notify the ATM.
              */
+            if ((db_acc.funds - current_acc.funds) >= 0){
+                //we are able to withdraw
+            } else {
+                //unable to withdraw the specified amount
+            }
         } else if (current_msg.msg_type == UPDATE_DB){
             /*
              * This is an UPDATE_DB request from the db editor. We first need to encrypt the user pin before
