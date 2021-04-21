@@ -31,6 +31,10 @@ int main(){
     }
 
     while(1) {
+//        if (msg.msg_type == PIN_WRONG){
+//            printf("\n The Pin Entered is incorrect, Please Re-enter your information. \n");
+//        }
+
         printf("Enter Account Number :\n");
         fgets(current_acc.acc_num, 15, stdin);
         current_acc.acc_num[strcspn(current_acc.acc_num, "\n")] = 0;
@@ -61,67 +65,90 @@ int main(){
 
 
         //If pin is wrong (5 = PING_WRONG)
-       if(msg.msg_type == PIN_WRONG){
-           for(int i = 0; i < 3; i++){
+//       if(msg.msg_type == PIN_WRONG){
+//           for(int i = 0; i < 3; i++){
+//
+//               printf("pin wrong %d re-enter pin", i + 1);
+//
+//               //re-enter pin
+//               printf("Enter pin :\n");
+//               fgets(current_acc.pin, 10, stdin);
+//
+//               msg.message_type = 1;
+//               msg.contents = current_acc;
+//               msg.msg_type = PIN;
+//
+//               //send pin again
+//               if(msgsnd(msgqidsend, (void *)&msg, sizeof(struct messages), 0) == -1){
+//                   printf("error sending message");
+//                   exit(EXIT_FAILURE);
+//               }
+//
+//               //receive message
+//               if (msgrcv(msgqidrec, (void *)&msg, sizeof(struct messages), 0, 0) == -1){
+//                   printf("error receiving pin\n");
+//                   exit(1);
+//               }
+//
+//               //break is pin is correct (6 = OK)
+//               if (msg.msg_type == OK) {
+//                   break;
+//               }
+//           }
+//           //break is pin is correct (6 = OK)
+//           if (msg.msg_type == OK) {
+//               break;
+//           }
+//           //EXIT and block account because pin was wrong 3 times
+//           else{
+//               printf("account blocked");
+//               exit(1);
+//           }
+//       }
 
-               printf("pin wrong %d re-enter pin", i + 1);
+        if(msg.msg_type == OK) {
+            printf("Enter Banking Operations: \n");
+            printf("1 for Balance check | Enter 2 for Withdrawal \n");
+            printf(">> ");
 
-               //re-enter pin
-               printf("Enter pin :\n");
-               fgets(current_acc.pin, 10, stdin);
+            char operation[1];
+            fgets(operation, 10, stdin);
+            operation[strcspn(current_acc.acc_num, "\n")] = 0;
 
-               msg.message_type = 1;
-               msg.contents = current_acc;
-               msg.msg_type = PIN;
+            int op = atoi(operation);
 
-               //send pin again
-               if(msgsnd(msgqidsend, (void *)&msg, sizeof(struct messages), 0) == -1){
-                   printf("error sending message");
-                   exit(EXIT_FAILURE);
-               }
 
-               //receive message
-               if (msgrcv(msgqidrec, (void *)&msg, sizeof(struct messages), 0, 0) == -1){
-                   printf("error receiving pin\n");
-                   exit(1);
-               }
+            if(op == 1){
+                msg.msg_type = BALANCE;
+            }else if(op == 2){
+                printf("Enter Amount to Withdraw:  \n");
+                char withdraw[100];
+                fgets(withdraw, 10, stdin);
+                withdraw[strcspn(current_acc.acc_num, "\n")] = 0;
 
-               //break is pin is correct (6 = OK)
-               if (msg.msg_type == OK) {
-                   break;
-               }
-           }
-           //break is pin is correct (6 = OK)
-           if (msg.msg_type == OK) {
-               break;
-           }
-           //EXIT and block account because pin was wrong 3 times
-           else{
-               printf("account blocked");
-               exit(1);
-           }
-       }
+                msg.msg_type = WITHDRAW;
+                msg.contents.funds = (float) strtod(withdraw, NULL);
+            }
 
-        printf("Enter Banking Operations (BALANCE): \n");
-        char temp[10];
-        fgets(temp, 10, stdin);
-        msg.msg_type = BALANCE;
 
-        //Send message to server
-        if(msgsnd(msgqidsend, (void *)&msg, sizeof(struct messages), 0) == -1){
-            printf("error sending message");
-            exit(EXIT_FAILURE);
+            //Send message to server
+            if (msgsnd(msgqidsend, (void *) &msg, sizeof(struct messages), 0) == -1) {
+                printf("error sending message");
+                exit(EXIT_FAILURE);
+            }
+
+            //receive message from server
+            if (msgrcv(msgqidrec, (void *) &msg, sizeof(struct messages), 0, 0) == -1) {
+                printf("error receiving pin\n");
+                exit(1);
+            }
+
+            if(op == 1){
+                printf("Account Balance: %f", msg.contents.funds);
+            }else if(op == 2){
+                printf("Account Balance after Withdrawal: %f", msg.contents.funds);
+            }
         }
-
-        //receive message from server
-        if (msgrcv(msgqidrec, (void *)&msg, sizeof(struct messages), 0, 0) == -1){
-            printf("error receiving pin\n");
-            exit(1);
-        }
-
-        printf("Account Balance: %f", msg.contents.funds);
-
-        // DIDNT IMPLEMENT WITHDRAW, SORRY :/
     }
 }
 
