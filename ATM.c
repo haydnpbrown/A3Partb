@@ -32,7 +32,7 @@ int main(){
 
     while(1) {
         if (msg.msg_type == PIN_WRONG){
-            printf("\n The Pin Entered is incorrect, Please Re-enter your information. \n");
+            printf("\nThe Pin Entered is incorrect, Please Re-enter your information. \n");
         }
 
         printf("Enter Account Number :\n");
@@ -63,48 +63,9 @@ int main(){
             exit(1);
         }
 
-
-        //If pin is wrong (5 = PING_WRONG)
-//       if(msg.msg_type == PIN_WRONG){
-//           for(int i = 0; i < 3; i++){
-//
-//               printf("pin wrong %d re-enter pin", i + 1);
-//
-//               //re-enter pin
-//               printf("Enter pin :\n");
-//               fgets(current_acc.pin, 10, stdin);
-//
-//               msg.message_type = 1;
-//               msg.contents = current_acc;
-//               msg.msg_type = PIN;
-//
-//               //send pin again
-//               if(msgsnd(msgqidsend, (void *)&msg, sizeof(struct messages), 0) == -1){
-//                   printf("error sending message");
-//                   exit(EXIT_FAILURE);
-//               }
-//
-//               //receive message
-//               if (msgrcv(msgqidrec, (void *)&msg, sizeof(struct messages), 0, 0) == -1){
-//                   printf("error receiving pin\n");
-//                   exit(1);
-//               }
-//
-//               //break is pin is correct (6 = OK)
-//               if (msg.msg_type == OK) {
-//                   break;
-//               }
-//           }
-//           //break is pin is correct (6 = OK)
-//           if (msg.msg_type == OK) {
-//               break;
-//           }
-//           //EXIT and block account because pin was wrong 3 times
-//           else{
-//               printf("account blocked");
-//               exit(1);
-//           }
-//       }
+        if (msg.msg_type == ACCOUNT_LOCKED){
+            printf("\nAccount has been locked \n\n");
+        }
 
         if(msg.msg_type == OK) {
             printf("Enter Banking Operations: \n");
