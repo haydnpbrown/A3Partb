@@ -23,7 +23,7 @@ void appendItem(struct db_item itemToAppend){
         exit(1);
     }
     printf("The entry to append: %s,%s,%.2f \n", itemToAppend.acc_num, itemToAppend.pin, itemToAppend.funds);
-    fprintf(dbfile, "\n%s,%s,%.2f", itemToAppend.acc_num, itemToAppend.pin, itemToAppend.funds);
+    fprintf(dbfile, "%s,%s,%.2f\n", itemToAppend.acc_num, itemToAppend.pin, itemToAppend.funds);
     fclose(dbfile);
 }
 
@@ -62,6 +62,12 @@ struct db_item getItem(char *acc){
 }
 
 void replaceItem(struct db_item itemToReplace){
+    //encode pin of itemToReplace
+    int temp_encode = atoi(itemToReplace.pin) - 1;
+    char temp[4];
+    sprintf(temp, "%d", temp_encode);
+    strcpy(itemToReplace.pin, temp);
+
     FILE *dbfile;
     FILE *dbfile2;
     char str[MAX];
@@ -106,8 +112,50 @@ void replaceItem(struct db_item itemToReplace){
 }
 
 
-void lockAccount(char *acc){
+void lockAccount(struct db_item itemToLock){
+    struct db_item temp_item = getItem(itemToLock.acc_num);
+    FILE *dbfile;
+    FILE *dbfile2;
+    char str[MAX];
+    char str2[MAX];
+    char *filename = "db.txt";
+    char *tempname = "temp.txt";
+    dbfile = fopen(filename, "r");
+    if(dbfile == NULL){
+        printf("error opening the db file for reading \n");
+        exit(1);
+    }
+    dbfile2 = fopen(tempname, "w");
+    if(dbfile2 == NULL){
+        printf("error opening the db file for writing \n");
+        exit(1);
+    }
 
+    while(!feof(dbfile)){
+        strcpy(str, "\0");
+        strcpy(str2, "\0");
+        fgets(str, MAX, dbfile);
+        str[strcspn(str, "\n")] = 0;
+        strcpy(str2, str);
+        char *token = strtok(str, ",");
+        if (token != NULL){
+            printf("the line to check: %s", str2);
+            printf("the token to check: %s", token);
+            if (strcmp(token, itemToLock.acc_num) == 0){
+                //this is the line to replace
+                itemToLock.acc_num[0]='X';
+                fprintf(dbfile2, "%s,%s,%.2f\n", itemToLock.acc_num, temp_item.pin, temp_item.funds);
+            } else {
+                //copy the line from old to new file
+                fprintf(dbfile2, "%s\n", str2);
+            }
+        }
+    }
+
+    fclose(dbfile);
+    fclose(dbfile2);
+    remove(filename);
+    rename(tempname, filename);
 }
 
 int main() {
@@ -119,7 +167,7 @@ int main() {
     struct db_item current_acc; //acc info of the acc currently in use
     struct db_item db_acc; //the temp acc retrived from db used for comparison
     struct messages current_msg; //current message coming in/going out
-    int pin_count = 0; //tracks the number of consecutive wrong pin entries
+    int pin_count = 1; //tracks the number of consecutive wrong pin entries
     pid_t pid;
 
     //delete the msg queue is it exists
@@ -184,12 +232,19 @@ int main() {
                         printf("error sending msg to atm");
                         exit(EXIT_FAILURE);
                     }
+                    pin_count = 0;
                 } else {
-                    //the pins dont match, remove 1 try.
+                    //the pins dont match, see if the account should be locked
                     if (pin_count == 3){
                         //lock the account by setting the first char in the acc # to an x
-
-
+                        lockAccount(current_acc);
+                        current_msg.msg_type = ACCOUNT_LOCKED;
+                        current_msg.message_type = 1;
+                        if (msgsnd(outmsgq, (void *)&current_msg, sizeof(struct messages), 0) == -1){
+                            printf("error sending msg to atm");
+                            exit(EXIT_FAILURE);
+                        }
+                        pin_count = 0;
                     } else {
                         //increment the # of tries and return a failure message
                         pin_count++;
@@ -247,7 +302,7 @@ int main() {
              * appending the request to the database.
              */
             printf("update db request being handled \n");
-            int temp_encode = atoi(current_acc.pin) + 1; //encode the pin number
+            int temp_encode = atoi(current_acc.pin) - 1; //encode the pin number
             char temp[4];
             sprintf(temp, "%d", temp_encode); //cast pin back to chars
             strcpy(current_acc.pin, temp);
