@@ -145,10 +145,13 @@ int main(){
                 exit(1);
             }
 
-            if(op == 1){
-                printf("Account Balance: %f\n\n", msg.contents.funds);
-            }else if(op == 2){
-                printf("Account Balance after Withdrawal: %f\n\n", msg.contents.funds);
+            if(msg.msg_type == BALANCE){
+                printf("Account Balance: %.2f\n\n", msg.contents.funds);
+            }else if(msg.msg_type == FUNDS_OK){
+                printf("Account Balance after Withdrawal: %.2f\n\n", msg.contents.funds);
+            }
+            else if(msg.msg_type == NSF){
+                printf("Insufficient Funds \n\n");
             }
         }
     }
