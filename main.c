@@ -22,8 +22,8 @@ void appendItem(struct db_item itemToAppend){
         printf("error opening the db file for appending \n");
         exit(1);
     }
-    printf("The entry to append: %s,%s,%f \n", itemToAppend.acc_num, itemToAppend.pin, itemToAppend.funds);
-    fprintf(dbfile, "\n%s,%s,%f", itemToAppend.acc_num, itemToAppend.pin, itemToAppend.funds);
+    printf("The entry to append: %s,%s,%.2f \n", itemToAppend.acc_num, itemToAppend.pin, itemToAppend.funds);
+    fprintf(dbfile, "\n%s,%s,%.2f", itemToAppend.acc_num, itemToAppend.pin, itemToAppend.funds);
     fclose(dbfile);
 }
 
@@ -88,12 +88,13 @@ void replaceItem(struct db_item itemToReplace){
         char *token = strtok(str, ",");
         if (strcmp(token, itemToReplace.acc_num) == 0){
             //this is the line to replace
-            fprintf(dbfile2, "%s,%s,fd\n", itemToReplace.acc_num, itemToReplace.pin, itemToReplace.funds);
+            fprintf(dbfile2, "%s,%s,%f\n", itemToReplace.acc_num, itemToReplace.pin, itemToReplace.funds);
         } else {
             //copy the line from old to new file
             fprintf(dbfile2, "%s\n", str2);
         }
     }
+
     fclose(dbfile);
     fclose(dbfile2);
     remove(filename);

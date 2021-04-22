@@ -31,9 +31,9 @@ int main(){
     }
 
     while(1) {
-//        if (msg.msg_type == PIN_WRONG){
-//            printf("\n The Pin Entered is incorrect, Please Re-enter your information. \n");
-//        }
+        if (msg.msg_type == PIN_WRONG){
+            printf("\n The Pin Entered is incorrect, Please Re-enter your information. \n");
+        }
 
         printf("Enter Account Number :\n");
         fgets(current_acc.acc_num, 15, stdin);
@@ -113,7 +113,7 @@ int main(){
 
             char operation[1];
             fgets(operation, 10, stdin);
-            operation[strcspn(current_acc.acc_num, "\n")] = 0;
+            operation[strcspn(operation, "\n")] = 0;
 
             int op = atoi(operation);
 
@@ -124,7 +124,7 @@ int main(){
                 printf("Enter Amount to Withdraw:  \n");
                 char withdraw[100];
                 fgets(withdraw, 10, stdin);
-                withdraw[strcspn(current_acc.acc_num, "\n")] = 0;
+                withdraw[strcspn(withdraw, "\n")] = 0;
                 printf("Amount to withdraw %s\n", withdraw);
 
                 msg.msg_type = WITHDRAW;
