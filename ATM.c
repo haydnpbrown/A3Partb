@@ -31,9 +31,9 @@ int main(){
     }
 
     while(1) {
-//        if (msg.msg_type == PIN_WRONG){
-//            printf("\n The Pin Entered is incorrect, Please Re-enter your information. \n");
-//        }
+        if (msg.msg_type == PIN_WRONG){
+            printf("\n The Pin Entered is incorrect, Please Re-enter your information. \n");
+        }
 
         printf("Enter Account Number :\n");
         fgets(current_acc.acc_num, 15, stdin);
