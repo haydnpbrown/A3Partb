@@ -91,7 +91,7 @@ void replaceItem(struct db_item itemToReplace){
             printf("the token to check: %s", token);
             if (strcmp(token, itemToReplace.acc_num) == 0){
                 //this is the line to replace
-                fprintf(dbfile2, "%s,%s,%f\n", itemToReplace.acc_num, itemToReplace.pin, itemToReplace.funds);
+                fprintf(dbfile2, "%s,%s,%.2f\n", itemToReplace.acc_num, itemToReplace.pin, itemToReplace.funds);
             } else {
                 //copy the line from old to new file
                 fprintf(dbfile2, "%s\n", str2);
