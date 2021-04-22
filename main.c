@@ -106,6 +106,10 @@ void replaceItem(struct db_item itemToReplace){
 }
 
 
+void lockAccount(char *acc){
+
+}
+
 int main() {
 
     struct db_item db[100]; //array that represents the database
