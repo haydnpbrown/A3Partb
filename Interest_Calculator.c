@@ -94,33 +94,72 @@ void replaceItem(struct db_item itemToReplace){
     rename(tempname, filename);
 }
 
+void calculateInterest(){
+    printf("Calculating interest for all accounts\n");
+    FILE *dbfile;
+    char str[100];
+    char *filename = "db.txt";
+    dbfile = fopen(filename, "r");
+    if (dbfile == NULL) {
+        printf("error opening the db file for reading \n");
+        exit(1);
+    }
+
+    struct db_item temp_item;
+    while (!feof(dbfile)) {
+        strcpy(str, "\0");
+        fgets(str, MAX, dbfile);
+        str[strcspn(str, "\n")] = 0;
+        char *token = strtok(str, ",");
+        if (token != NULL) {
+            strcpy(temp_item.acc_num, token);
+            token = strtok(NULL, ",");
+            strcpy(temp_item.pin, token);
+            token = strtok(NULL, ",");
+            temp_item.funds = atof(token);
+            printf("Initial Account: %s %s %.2f\n", temp_item.acc_num, temp_item.pin, temp_item.funds);
+            if (temp_item.funds > 0.0) {
+                float newB = temp_item.funds + (temp_item.funds * 0.01);
+                temp_item.funds = newB;
+            } else {
+                float newB = temp_item.funds + (temp_item.funds * 0.02);
+                temp_item.funds = newB;
+            }
+            printf("Account After Interest: %s %s %.2f\n", temp_item.acc_num, temp_item.pin, temp_item.funds);
+            replaceItem(temp_item);
+            sleep(2);
+        }
+    }
+    fclose(dbfile);
+}
 
 
 int main(){
     while(1) {
-        sleep(60);
+        calculateInterest();
+        sleep(10);
 
-        int i = 1;
-        int running = 1;
-        while (running == 1) {
-            struct db_item account = getItem(i);
-            if (account.acc_num[0] == '\0') {
-                running = 0;
-            } else {
-                printf("Initial Account: %s %s %.2f\n", account.acc_num, account.pin, account.funds);
-
-                if (account.funds > 0.0) {
-                    float newB = account.funds + (account.funds * 0.01);
-                    account.funds = newB;
-                } else {
-                    float newB = account.funds + (account.funds * 0.02);
-                    account.funds = newB;
-                }
-                printf("Account After Interest: %s %s %.2f\n", account.acc_num, account.pin, account.funds);
-                replaceItem(account);
-                i++;
-            }
-            sleep(2);
-        }
+//        int i = 1;
+//        int running = 1;
+//        while (running == 1) {
+//            struct db_item account = getItem(i);
+//            if (account.acc_num[0] == '\0') {
+//                running = 0;
+//            } else {
+//                printf("Initial Account: %s %s %.2f\n", account.acc_num, account.pin, account.funds);
+//
+//                if (account.funds > 0.0) {
+//                    float newB = account.funds + (account.funds * 0.01);
+//                    account.funds = newB;
+//                } else {
+//                    float newB = account.funds + (account.funds * 0.02);
+//                    account.funds = newB;
+//                }
+//                printf("Account After Interest: %s %s %.2f\n", account.acc_num, account.pin, account.funds);
+//                replaceItem(account);
+//                i++;
+//            }
+//            sleep(2);
+//        }
     }
 }
