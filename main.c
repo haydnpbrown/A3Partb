@@ -387,19 +387,24 @@ int main() {
             }
         }
         else if (current_msg.msg_type == TRANSFER){
-            db_transfer_acc = getItem(current_acc.transfer_acc_num);
-            db_acc.funds = db_acc.funds - current_acc.funds;
-            db_transfer_acc.funds = db_transfer_acc.funds + current_acc.funds;
-            current_acc.funds = db_acc.funds;
-            replaceItem(current_acc);
-            replaceItem(db_transfer_acc);
+            pid = fork();
+            if (pid < 0){
+                printf("Error forking\n");
+            } else if (pid == 0){
+                db_transfer_acc = getItem(current_acc.transfer_acc_num);
+                db_acc.funds = db_acc.funds - current_acc.funds;
+                db_transfer_acc.funds = db_transfer_acc.funds + current_acc.funds;
+                current_acc.funds = db_acc.funds;
+                replaceItem(current_acc);
+                replaceItem(db_transfer_acc);
 
-            current_msg.msg_type = TRANSFER;
-            current_msg.message_type = 1;
-            current_msg.contents = current_acc;
-            if (msgsnd(outmsgq, (void *)&current_msg, sizeof(struct messages), 0) == -1){
-                printf("error sending msg to atm");
-                exit(EXIT_FAILURE);
+                current_msg.msg_type = TRANSFER;
+                current_msg.message_type = 1;
+                current_msg.contents = current_acc;
+                if (msgsnd(outmsgq, (void *)&current_msg, sizeof(struct messages), 0) == -1){
+                    printf("error sending msg to atm");
+                    exit(EXIT_FAILURE);
+                }
             }
         }
     }
