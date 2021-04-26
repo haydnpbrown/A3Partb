@@ -392,6 +392,7 @@ int main() {
                 printf("Error forking\n");
             } else if (pid == 0){
                 db_transfer_acc = getItem(current_acc.transfer_acc_num);
+                db_acc = getItem(current_acc.acc_num);
                 db_acc.funds = db_acc.funds - current_acc.funds;
                 db_transfer_acc.funds = db_transfer_acc.funds + current_acc.funds;
                 current_acc.funds = db_acc.funds;
