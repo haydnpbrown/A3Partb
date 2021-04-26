@@ -254,8 +254,6 @@ int main() {
             exit(EXIT_FAILURE);
         }
         current_acc = current_msg.contents;
-        printf("receiving msg \n");
-        printf("db item received: %s,%s,%f\n", current_acc.acc_num, current_acc.pin, current_acc.funds);
 
         if (current_msg.msg_type == PIN) {
             pid = fork();
@@ -273,8 +271,6 @@ int main() {
                 if (strcmp(db_acc.acc_num, "0") == 0) {
                     //the account number is not in the db, return PIN_WRONG
                     current_msg.msg_type = PIN_WRONG;
-                    current_msg.message_type = 1;
-                    //send msg to ATM, message_type = 1
                     if (msgsnd(outmsgq, (void *) &current_msg, sizeof(struct messages), 0) == -1) {
                         printf("error sending msg to atm");
                         exit(EXIT_FAILURE);
@@ -287,8 +283,6 @@ int main() {
                     if (strcmp(db_acc.pin, temp) == 0) {
                         //the pins match, return a success message
                         current_msg.msg_type = OK;
-                        current_msg.message_type = 1;
-                        //send msg to ATM, message_type = 1
                         if (msgsnd(outmsgq, (void *) &current_msg, sizeof(struct messages), 0) == -1) {
                             printf("error sending msg to atm");
                             exit(EXIT_FAILURE);
@@ -300,7 +294,6 @@ int main() {
                             //lock the account by setting the first char in the acc # to an x
                             lockAccount(current_acc);
                             current_msg.msg_type = ACCOUNT_LOCKED;
-                            current_msg.message_type = 1;
                             if (msgsnd(outmsgq, (void *) &current_msg, sizeof(struct messages), 0) == -1) {
                                 printf("error sending msg to atm");
                                 exit(EXIT_FAILURE);
@@ -310,8 +303,6 @@ int main() {
                             //increment the # of tries and return a failure message
                             pin_count++;
                             current_msg.msg_type = PIN_WRONG;
-                            current_msg.message_type = 1;
-                            //send msg to ATM, message_type = 1
                             if (msgsnd(outmsgq, (void *) &current_msg, sizeof(struct messages), 0) == -1) {
                                 printf("error sending msg to atm");
                                 exit(EXIT_FAILURE);
@@ -331,8 +322,7 @@ int main() {
              */
                 db_acc = getItem(current_acc.acc_num);
                 current_msg.msg_type = BALANCE;
-                current_msg.message_type = 1;
-                current_msg.contents = db_acc; //the currently accessed account is already in db_acc
+                current_msg.contents = db_acc;
                 if (msgsnd(outmsgq, (void *) &current_msg, sizeof(struct messages), 0) == -1) {
                     printf("error sending msg to atm");
                     exit(EXIT_FAILURE);
@@ -353,7 +343,6 @@ int main() {
                     current_acc.funds = db_acc.funds - current_acc.funds;
                     replaceItem(current_acc);
                     current_msg.msg_type = FUNDS_OK;
-                    current_msg.message_type = 1;
                     current_msg.contents = current_acc;
                     if (msgsnd(outmsgq, (void *) &current_msg, sizeof(struct messages), 0) == -1) {
                         printf("error sending msg to atm");
@@ -362,7 +351,6 @@ int main() {
                 } else {
                     //unable to withdraw the specified amount
                     current_msg.msg_type = NSF;
-                    current_msg.message_type = 1;
                     current_msg.contents = current_acc;
                     if (msgsnd(outmsgq, (void *) &current_msg, sizeof(struct messages), 0) == -1) {
                         printf("error sending msg to atm");
@@ -401,7 +389,6 @@ int main() {
                 replaceItem(db_transfer_acc);
 
                 current_msg.msg_type = TRANSFER;
-                current_msg.message_type = 1;
                 current_msg.contents = current_acc;
                 if (msgsnd(outmsgq, (void *)&current_msg, sizeof(struct messages), 0) == -1){
                     printf("error sending msg to atm");

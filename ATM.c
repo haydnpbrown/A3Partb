@@ -9,12 +9,17 @@
 #include <string.h>
 #include "struct_types.h"
 
-int main(){
+int main(int argc, char *argv[]){
 
     int msgqidsend; //id of the outgoing msg queue
     int msgqidrec; //id of incoming message
     struct db_item current_acc; //acc info of the acc currently in use
     struct messages msg;
+    //convert the program arg to the atm id
+    long int id;
+    char *eptr;
+    id = strtol(argv[1], &eptr, 10);
+    printf("ATM with id: %ld has started. \n", id);
 
     //initializing the message to send queue
     msgqidsend = msgget((key_t)1111, 0666 | IPC_CREAT);
@@ -47,7 +52,7 @@ int main(){
         fgets(current_acc.pin, 15, stdin);
         current_acc.pin[strcspn(current_acc.pin, "\n")] = 0;
 
-        msg.message_type = 1;
+        msg.message_type = id;
         msg.contents = current_acc;
         msg.msg_type = PIN;
 
@@ -58,7 +63,7 @@ int main(){
         }
 
         //receive message from server
-        if (msgrcv(msgqidrec, (void *)&msg, sizeof(struct messages), 0, 0) == -1){
+        if (msgrcv(msgqidrec, (void *)&msg, sizeof(struct messages), id, 0) == -1){
             printf("error receiving pin\n");
             exit(1);
         }
@@ -113,7 +118,7 @@ int main(){
             }
 
             //receive message from server
-            if (msgrcv(msgqidrec, (void *) &msg, sizeof(struct messages), 0, 0) == -1) {
+            if (msgrcv(msgqidrec, (void *) &msg, sizeof(struct messages), id, 0) == -1) {
                 printf("error receiving pin\n");
                 exit(1);
             }
