@@ -25,6 +25,14 @@ void appendItem(struct db_item itemToAppend){
     printf("The entry to append: %s,%s,%.2f \n", itemToAppend.acc_num, itemToAppend.pin, itemToAppend.funds);
     fprintf(dbfile, "%s,%s,%.2f\n", itemToAppend.acc_num, itemToAppend.pin, itemToAppend.funds);
     fclose(dbfile);
+
+    //create semaphore for the new entry
+    int semid = semget((key_t) atoi(itemToAppend.acc_num), 1, 0666 | IPC_CREAT);
+    if (!set_semvalue(semid)){
+        printf("There was an error setting the sem value for %s semaphore\n", itemToAppend.acc_num);
+        exit(EXIT_FAILURE);
+    }
+    printf("semaphore created for token %s with id %d", itemToAppend.acc_num, semid);
 }
 
 /*
