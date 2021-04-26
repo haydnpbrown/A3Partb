@@ -2,14 +2,14 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
-#include "semfuncs.h"
+#include "semun.h"
 
-union semun {
-    int val;
-    struct semid_ds *buf;
-    unsigned short *array;
-    struct seminfo *__buf;
-};
+//union semun {
+//    int val;
+//    struct semid_ds *buf;
+//    unsigned short *array;
+//    struct seminfo *__buf;
+//};
 
 int set_semvalue(int semid){
     union semun sem_union;

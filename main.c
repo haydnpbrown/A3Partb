@@ -34,7 +34,7 @@ void appendItem(struct db_item itemToAppend){
         printf("There was an error setting the sem value for %s semaphore\n", itemToAppend.acc_num);
         exit(EXIT_FAILURE);
     }
-    printf("semaphore created for token %s with id %d", itemToAppend.acc_num, semid);
+    printf("semaphore created for token %s with id %d \n", itemToAppend.acc_num, semid);
 }
 
 /*
@@ -205,13 +205,12 @@ void initializeSemaphores(){
                 printf("There was an error setting the sem value for %s semaphore\n", token);
                 exit(EXIT_FAILURE);
             }
-            printf("semaphore created for token %s with id %d", token, semid);
+            printf("semaphore created for token %s with id %d \n", token, semid);
         }
     }
 }
 
 int main() {
-
     struct db_item db[100]; //array that represents the database
     int running = 1; //to determine if the system should continue to run
     int inmsgq; //id of the incoming msg queue
@@ -243,7 +242,7 @@ int main() {
     }
 
     //initialize db semaphores
-    printf("initialize semaphores");
+    printf("initialize semaphores\n");
     initializeSemaphores();
 
     //wait for messages forever
