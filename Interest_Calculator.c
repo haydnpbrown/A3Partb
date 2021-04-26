@@ -14,36 +14,7 @@
 
 #define MAX 256
 
-
-struct db_item getItem(int linenumber){
-    int found = 0;
-    FILE *dbfile;
-    char str[100];
-    char *filename = "db.txt";
-    dbfile = fopen(filename, "r");
-    if(dbfile == NULL){
-        printf("error opening the db file for reading \n");
-        exit(1);
-    }
-    struct db_item temp_item;
-    int count = 1;
-    while(fgets(str, 100, dbfile) != NULL){
-
-        if (linenumber == count) {
-            char *token = strtok(str, ",");
-            strcpy(temp_item.acc_num, token);
-            token = strtok(NULL, ",");
-            strcpy(temp_item.pin, token);
-            token = strtok(NULL, ",");
-            temp_item.funds = atof(token);
-            break;
-        }
-        count++;
-    }
-
-    return temp_item;
-}
-
+//The replaceItem method replaces an item in the database
 void replaceItem(struct db_item itemToReplace){
     //encode pin of itemToReplace
     int temp_encode = atoi(itemToReplace.pin) - 1;
@@ -136,30 +107,7 @@ void calculateInterest(){
 
 int main(){
     while(1) {
+        sleep(60);
         calculateInterest();
-        sleep(10);
-
-//        int i = 1;
-//        int running = 1;
-//        while (running == 1) {
-//            struct db_item account = getItem(i);
-//            if (account.acc_num[0] == '\0') {
-//                running = 0;
-//            } else {
-//                printf("Initial Account: %s %s %.2f\n", account.acc_num, account.pin, account.funds);
-//
-//                if (account.funds > 0.0) {
-//                    float newB = account.funds + (account.funds * 0.01);
-//                    account.funds = newB;
-//                } else {
-//                    float newB = account.funds + (account.funds * 0.02);
-//                    account.funds = newB;
-//                }
-//                printf("Account After Interest: %s %s %.2f\n", account.acc_num, account.pin, account.funds);
-//                replaceItem(account);
-//                i++;
-//            }
-//            sleep(2);
-//        }
     }
 }
