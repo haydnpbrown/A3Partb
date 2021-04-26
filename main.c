@@ -208,6 +208,7 @@ void initializeSemaphores() {
             printf("semaphore created for token %s with id %d \n", token, semid);
         }
     }
+    fclose(dbfile);
 }
 
 int main() {
