@@ -69,7 +69,7 @@ int main(){
 
         if(msg.msg_type == OK) {
             printf("Enter Banking Operations: \n");
-            printf("1 for Balance check | Enter 2 for Withdrawal \n");
+            printf("1 for Balance check | Enter 2 for Withdrawal | Enter 3 for Money Transfer \n");
             printf(">> ");
 
             char operation[1];
@@ -91,8 +91,20 @@ int main(){
                 msg.msg_type = WITHDRAW;
                 current_acc.funds = (float) strtod(withdraw, NULL);
                 msg.contents = current_acc;
-            }
+            }else if (op == 3){
+                printf("Enter Account to Send Money to:\n");
+                fgets(current_acc.transfer_acc_num, 15, stdin);
+                current_acc.transfer_acc_num[strcspn(current_acc.transfer_acc_num, "\n")] = 0;
 
+                printf("Enter Amount to send:\n");
+                char transfer[100];
+                fgets(transfer, 10, stdin);
+                transfer[strcspn(transfer, "\n")] = 0;
+
+                msg.msg_type = TRANSFER;
+                current_acc.funds = (float) strtod(transfer, NULL);
+                msg.contents = current_acc;
+            }
 
             //Send message to server
             if (msgsnd(msgqidsend, (void *) &msg, sizeof(struct messages), 0) == -1) {
@@ -113,6 +125,9 @@ int main(){
             }
             else if(msg.msg_type == NSF){
                 printf("Insufficient Funds \n\n");
+            }
+            else if(msg.msg_type == TRANSFER){
+                printf("Account Balance after Transfer: %.2f\n\n", msg.contents.funds);
             }
         }
     }

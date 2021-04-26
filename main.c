@@ -217,6 +217,7 @@ int main() {
     int outmsgq; //id of the outgoing msg queue
     struct db_item current_acc; //acc info of the acc currently in use
     struct db_item db_acc; //the temp acc retrived from db used for comparison
+    struct db_item db_transfer_acc; //account from transfer
     struct messages current_msg; //current message coming in/going out
     int pin_count = 1; //tracks the number of consecutive wrong pin entries
     pid_t pid;
@@ -362,6 +363,22 @@ int main() {
             sprintf(temp, "%d", temp_encode); //cast pin back to chars
             strcpy(current_acc.pin, temp);
             appendItem(current_acc); //append the db_item object to the database
+        }
+        else if (current_msg.msg_type == TRANSFER){
+            db_transfer_acc = getItem(current_acc.transfer_acc_num);
+            db_acc.funds = db_acc.funds - current_acc.funds;
+            db_transfer_acc.funds = db_transfer_acc.funds + current_acc.funds;
+            current_acc.funds = db_acc.funds;
+            replaceItem(current_acc);
+            replaceItem(db_transfer_acc);
+
+            current_msg.msg_type = TRANSFER;
+            current_msg.message_type = 1;
+            current_msg.contents = current_acc;
+            if (msgsnd(outmsgq, (void *)&current_msg, sizeof(struct messages), 0) == -1){
+                printf("error sending msg to atm");
+                exit(EXIT_FAILURE);
+            }
         }
     }
 

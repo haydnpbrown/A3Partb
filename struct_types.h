@@ -5,12 +5,13 @@
 #ifndef ASSINGMENT3PARTB_STRUCT_TYPES_H
 #define ASSINGMENT3PARTB_STRUCT_TYPES_H
 
-enum messagetype {PIN, BALANCE, WITHDRAW, UPDATE_DB, PIN_WRONG, OK, ACCOUNT_LOCKED, NSF, FUNDS_OK};
+enum messagetype {PIN, BALANCE, WITHDRAW, UPDATE_DB, PIN_WRONG, OK, ACCOUNT_LOCKED, NSF, FUNDS_OK, TRANSFER};
 
 struct db_item{
     char acc_num[10];
     char pin[10];
     float funds;
+    char transfer_acc_num[10];
 };
 
 struct messages {
