@@ -2,6 +2,7 @@ file(REMOVE_RECURSE
   "Assingment3Partb"
   "Assingment3Partb.pdb"
   "CMakeFiles/Assingment3Partb.dir/ATM.c.o"
+  "CMakeFiles/Assingment3Partb.dir/semfuncs.c.o"
 )
 
 # Per-language clean rules from dependency scanning.

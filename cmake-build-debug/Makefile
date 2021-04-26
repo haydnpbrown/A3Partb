@@ -58,10 +58,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /snap/clion/149/bin/cmake/linux/bin/cmake
+CMAKE_COMMAND = /snap/clion/151/bin/cmake/linux/bin/cmake
 
 # The command to remove a file.
-RM = /snap/clion/149/bin/cmake/linux/bin/cmake -E rm -f
+RM = /snap/clion/151/bin/cmake/linux/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -78,7 +78,7 @@ CMAKE_BINARY_DIR = /home/haydn/CLionProjects/A3Partb/cmake-build-debug
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/snap/clion/149/bin/cmake/linux/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/snap/clion/151/bin/cmake/linux/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -89,7 +89,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/snap/clion/149/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	/snap/clion/151/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -169,6 +169,33 @@ ATM.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/ATM.c.s
 .PHONY : ATM.c.s
 
+semfuncs.o: semfuncs.c.o
+
+.PHONY : semfuncs.o
+
+# target to build an object file
+semfuncs.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/semfuncs.c.o
+.PHONY : semfuncs.c.o
+
+semfuncs.i: semfuncs.c.i
+
+.PHONY : semfuncs.i
+
+# target to preprocess a source file
+semfuncs.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/semfuncs.c.i
+.PHONY : semfuncs.c.i
+
+semfuncs.s: semfuncs.c.s
+
+.PHONY : semfuncs.s
+
+# target to generate assembly for a file
+semfuncs.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Assingment3Partb.dir/build.make CMakeFiles/Assingment3Partb.dir/semfuncs.c.s
+.PHONY : semfuncs.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -181,6 +208,9 @@ help:
 	@echo "... ATM.o"
 	@echo "... ATM.i"
 	@echo "... ATM.s"
+	@echo "... semfuncs.o"
+	@echo "... semfuncs.i"
+	@echo "... semfuncs.s"
 .PHONY : help
 
 

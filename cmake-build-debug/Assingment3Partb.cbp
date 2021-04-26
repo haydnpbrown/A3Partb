@@ -79,6 +79,9 @@
 		<Unit filename="/home/haydn/CLionProjects/A3Partb/ATM.c">
 			<Option target="Assingment3Partb"/>
 		</Unit>
+		<Unit filename="/home/haydn/CLionProjects/A3Partb/semfuncs.c">
+			<Option target="Assingment3Partb"/>
+		</Unit>
 		<Unit filename="/home/haydn/CLionProjects/A3Partb/struct_types.h">
 			<Option target="Assingment3Partb"/>
 		</Unit>

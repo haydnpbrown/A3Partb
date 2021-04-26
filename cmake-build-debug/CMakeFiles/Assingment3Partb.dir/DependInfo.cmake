@@ -5,6 +5,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
   "/home/haydn/CLionProjects/A3Partb/ATM.c" "/home/haydn/CLionProjects/A3Partb/cmake-build-debug/CMakeFiles/Assingment3Partb.dir/ATM.c.o"
+  "/home/haydn/CLionProjects/A3Partb/semfuncs.c" "/home/haydn/CLionProjects/A3Partb/cmake-build-debug/CMakeFiles/Assingment3Partb.dir/semfuncs.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

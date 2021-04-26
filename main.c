@@ -61,6 +61,12 @@ struct db_item getItem(char *acc){
     return temp_item;
 }
 
+/*
+ * This function is used to update an item in the database. It is
+ * used by the withdraw method so that the available funds in the account can
+ * be updated. It takes a databse item struct as a parameter which should contain
+ * the account number to update and the new funds of the account.
+ */
 void replaceItem(struct db_item itemToReplace){
     //encode pin of itemToReplace
     int temp_encode = atoi(itemToReplace.pin) - 1;
@@ -112,6 +118,11 @@ void replaceItem(struct db_item itemToReplace){
 }
 
 
+/*
+ * This function is used to set the first character in an account number
+ * to an "X" to indicate that the user's account is locked after 3 consecutive
+ * failed logins.
+ */
 void lockAccount(struct db_item itemToLock){
     struct db_item temp_item = getItem(itemToLock.acc_num);
     FILE *dbfile;
@@ -156,6 +167,37 @@ void lockAccount(struct db_item itemToLock){
     fclose(dbfile2);
     remove(filename);
     rename(tempname, filename);
+}
+
+/*
+ * This function is used to initialize a semaphore for each
+ * entry in the database when the db server starts
+ */
+void initializeSemaphores(){
+    FILE *dbfile;
+    char str[100];
+    char *filename = "db.txt";
+    dbfile = fopen(filename, "r");
+    if(dbfile == NULL){
+        printf("error opening the db file for reading \n");
+        exit(1);
+    }
+
+    while(!feof(dbfile)){
+        strcpy(str, "\0");
+        fgets(str, MAX, dbfile);
+        str[strcspn(str, "\n")] = 0;
+        char *token = strtok(str, ",");
+        if (token != NULL){
+            printf("the sem to create/get: %s", token);
+            int semid = semget((key_t) atoi(token), 1, 0666 | IPC_CREAT);
+            if (!set_semvalue(semid)){
+                printf("There was an error setting the sem value for %s semaphore\n", token);
+                exit(EXIT_FAILURE);
+            }
+            printf("semaphore created for token %s with id %d", token, semid);
+        }
+    }
 }
 
 int main() {
