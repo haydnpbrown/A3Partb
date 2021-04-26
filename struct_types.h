@@ -19,9 +19,4 @@ struct messages {
     struct db_item contents;
 };
 
-int set_semvalue(int);
-void del_semvalue(int);
-int sp(int);
-int sv(int);
-
 #endif //ASSINGMENT3PARTB_STRUCT_TYPES_H

@@ -7,7 +7,9 @@
 #include <string.h>
 #include <sys/sem.h>
 #include <sys/msg.h>
+#include <sys/ipc.h>
 #include "struct_types.h"
+#include "semfuncs.h"
 
 #define MAX 256
 
@@ -239,6 +241,10 @@ int main() {
         printf("error creating the outgoing msg queue \n");
         exit(EXIT_FAILURE);
     }
+
+    //initialize db semaphores
+    printf("initialize semaphores");
+    initializeSemaphores();
 
     //wait for messages forever
     while(running){
