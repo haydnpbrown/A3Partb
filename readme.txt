@@ -1,15 +1,28 @@
-We handed in Part A and Part B in seperate files.
+For the term project we completed all components specified except generating a livestock/starvation case.
 
-For Part we we got B1) operational and were able to have proper communication between
-the DB_editor and the DB_server (main.c).
+For running a.2 concurrent ATM processes, b.5 concurrent ATM processes, c.Interest Calculator, d.Generating a
+deadlock case, and the bonus functionality (Money Transfer) please refer to Test_file.txt.
 
-For B2) we were unable to complete full communication between the ATM and the full system but are
-able to run the three processes concurrently and have minimal execution between them.
+The two reports for the deadlock and the bonus functionality are included in the submission.
 
-We replaced the message types with integers, as defined below:
-	PIN = 1
-	BALANCE = 2
-	WITHDRAW = 3
-	UPDATE_DB = 4
-	PIN_WRONG = 5
-	OK = 6
+FUNCTIONALITY OF EACH PROCESS:
+
+ATM.C:
+The ATM asks as the interface between the user and the system and takes input from the user to complete various
+operations.
+
+DB Server (main.c):
+The DB server does the main functionality of the system and performs the requested operation from the ATM user and
+uses it to update the DB.
+
+DB_editor.c:
+The DB editor works with the DB server by sending it an account to be created by taking input from the user and
+the once sent to the DB server the account gets added to the DB for use in the system.
+
+Interest_Calculator.c:
+The interest calculator updates the database by adding 1% funds to a user if they have positive funds and decrementing
+2% if the user has negative funds. It does this every 60s, we achieved this by sleeping the process for 60 before
+every time we run the functionality.
+
+
+
