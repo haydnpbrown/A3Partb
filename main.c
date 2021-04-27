@@ -425,6 +425,11 @@ int main() {
                 db_transfer_acc.funds = db_transfer_acc.funds + current_acc.funds;
                 current_acc.funds = db_acc.funds;
                 replaceItem(current_acc);
+                //increment pin of transfer acount because replaceItem will decrement it
+                int temp_encode = atoi(db_transfer_acc.pin) + 1;
+                char temp[4];
+                sprintf(temp, "%d", temp_encode);
+                strcpy(db_transfer_acc.pin, temp);
                 replaceItem(db_transfer_acc);
 
                 current_msg.msg_type = TRANSFER;
