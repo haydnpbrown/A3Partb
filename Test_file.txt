@@ -11,7 +11,7 @@ INITIAL SETUP FOR RUNNING THE SYSTEM:
 Step 1) Open 4 separate Linux Terminals
 Step 2) In the first terminal put ./dbserver to run the DB server (main.c)
 Step 3) In the second terminal put ./dbeditor to run the DB editor (DB_editor.c)
-Step 4) In the third terminal put ./atm to run the the ATM (ATM.c)
+Step 4) In the third terminal put ./atm 1 to run the the ATM (ATM.c) *1 represents the ATM id, make this any +ve int
 Step 5) In the fourth terminal put ./ic to run the Interest Calculator (Interest_Calculator)
 Step 6) In the window where you started the ATM there will be a prompt to input your account number:
 Input 00001 for the account number *press enter key
@@ -50,14 +50,14 @@ step 4) reopen/refresh db.txt and the file will be updated with the new account
 
 FOR RUNNING 2 CONCURRENT ATM PROCESSES:
 (This section is used to run two concurrent ATM processes with the system for a. in the term project)
-Step 1) Open another Terminal and call ./atm again (you will now have 2 ATM processes running)
+Step 1) Open another Terminal and call ./atm 2 (you will now have 2 ATM processes running, ids 1 and 2)
 Step 2) Input 00011 when prompted for the Account number | *press enter key
 Step 3) Input 317 when prompted for the PIN | *press enter key
 Step 4) Refer to ATM OPERATIONS above for further ATM operations
 
 FOR RUNNING 5 CONCURRENT ATM PROCESSES
 (This section is used to run 5 concurrent ATM processes with the system for b. in the term project)
-Step 1) Open 3 more terminals and call ./atm in each of them
+Step 1) Open 3 more terminals and call ./atm 3/4/5 (one number per executable) in each of them
 Step 2) Look inside db.txt to and use and input different account number for each new ATM process (eg. 12345)
 | *press enter key
 Step 3) Use the corresponding pin +1 for each of the PINs in the new ATM processes (eg. 311 + 1 -> INPUT 312)
@@ -68,8 +68,8 @@ FOR CREATING A DEADLOCK:
 (this section is used in the case you want to see the deadlock we generated for d. in the term project execute)
 Step 1) Open 3 Terminals
 Step 2) In the first terminal put ./dbserverdeadlock to run the DB server with the deadlock (maindeadlock.c)
-Step 3) In the second terminal put ./atm to run the first ATM process (ATM.c)
-Step 4) In the third terminal put ./atm to run the second ATM process (ATM.c)
+Step 3) In the second terminal put ./atm 1 to run the first ATM process (ATM.c)
+Step 4) In the third terminal put ./atm 2 to run the second ATM process (ATM.c)
 FOR THE FIRST ATM PROCESS:
 Step 5) Input Account number: 00001
 Step 6) Input PIN: 101
