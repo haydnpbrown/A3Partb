@@ -17,12 +17,6 @@
 
 //The replaceItem method replaces an item in the database
 void replaceItem(struct db_item itemToReplace){
-    //encode pin of itemToReplace
-    int temp_encode = atoi(itemToReplace.pin) - 1;
-    char temp[4];
-    sprintf(temp, "%d", temp_encode);
-    strcpy(itemToReplace.pin, temp);
-
     FILE *dbfile;
     FILE *dbfile2;
     char str[MAX];

@@ -14,7 +14,8 @@
 #define MAX 256
 
 /*
- * append an account entry to the end of the database given a db_item
+ * append an account entry to the end of the database given a db_item and create a semaphore
+ * for the entry.
  */
 void appendItem(struct db_item itemToAppend) {
     FILE *dbfile;
@@ -34,11 +35,10 @@ void appendItem(struct db_item itemToAppend) {
         printf("There was an error setting the sem value for %s semaphore\n", itemToAppend.acc_num);
         exit(EXIT_FAILURE);
     }
-    printf("semaphore created for token %s with id %d \n", itemToAppend.acc_num, semid);
 }
 
 /*
- * return a db_item object given an account number to search for
+ * return a db_item object from the database given an account number to search for
  */
 struct db_item getItem(char *acc) {
     int found = 0;
@@ -66,6 +66,7 @@ struct db_item getItem(char *acc) {
     }
 
     if (found != 1) {
+        //return a 0 for the account number to indicate to the calling function that it wasnt found
         strcpy(temp_item.acc_num, "0");
     }
     return temp_item;
@@ -76,6 +77,9 @@ struct db_item getItem(char *acc) {
  * used by the withdraw method so that the available funds in the account can
  * be updated. It takes a databse item struct as a parameter which should contain
  * the account number to update and the new funds of the account.
+ * The function works by copying the lines that aren't of interest into a new file, and replacing
+ * the line of interest with the new line in the new file. Once this is done, the original file is
+ * deleted and the new file is renamed to "db.txt"
  */
 void replaceItem(struct db_item itemToReplace) {
     //encode pin of itemToReplace
@@ -109,8 +113,6 @@ void replaceItem(struct db_item itemToReplace) {
         strcpy(str2, str);
         char *token = strtok(str, ",");
         if (token != NULL) {
-            printf("the line to check: %s", str2);
-            printf("the token to check: %s", token);
             if (strcmp(token, itemToReplace.acc_num) == 0) {
                 //this is the line to replace
                 fprintf(dbfile2, "%s,%s,%.2f\n", itemToReplace.acc_num, itemToReplace.pin, itemToReplace.funds);
@@ -223,8 +225,14 @@ int main() {
     int pin_count = 1; //tracks the number of consecutive wrong pin entries
     pid_t pid;
 
-    //delete the msg queue is it exists
+    //delete the inbound msg queue is it exists
     if (msgctl(msgget((key_t) 1111, 0666 | IPC_CREAT), IPC_RMID, 0) == -1) {
+        printf("error closing the msg queue \n");
+        exit(EXIT_FAILURE);
+    }
+
+    //delete the outgoing msg queue is it exists
+    if (msgctl(msgget((key_t) 1112, 0666 | IPC_CREAT), IPC_RMID, 0) == -1) {
         printf("error closing the msg queue \n");
         exit(EXIT_FAILURE);
     }
@@ -264,13 +272,6 @@ int main() {
                 if (!sp(semid)){
                     exit(EXIT_FAILURE);
                 }
-                //search file for acc num
-                /*
-                 * acc # found
-                 * ->pin correct - return OK, save info locally
-                 * ->pin incorrect - if 3rd try, lock acc. if <3 tries, ++tries and return pin_wrong
-                 */
-                //acc # not found - return pin_wrong
                 db_acc = getItem(current_acc.acc_num);
                 if (strcmp(db_acc.acc_num, "0") == 0) {
                     //the account number is not in the db, return PIN_WRONG
@@ -328,9 +329,9 @@ int main() {
                     exit(EXIT_FAILURE);
                 }
                 /*
-             * this is a BALANCE request from the atm. The currently accessed acc from the db should be stored in
-             * current_acc. Return the funds field from here to the ATM
-             */
+                 * this is a BALANCE request from the ATM. Find the item sent from the ATM in the database
+                 * and return it to the ATM so it can extract its funds.
+                 */
                 db_acc = getItem(current_acc.acc_num);
                 current_msg.msg_type = BALANCE;
                 current_msg.contents = db_acc;
@@ -352,10 +353,12 @@ int main() {
                     exit(EXIT_FAILURE);
                 }
                 /*
-             * WITHDRAW request from the ATM. The current account is stored locally, so check its funds to see
-             * if the request amount can be withdrawn. If it can, do so. If the account does not have enough funds
-             * for the operation then notify the ATM.
-             */
+                 * This is a WITHDRAW request from the ATM. Get the item sent from the ATM from the database
+                 * and compare its funds field to the amount of funds request to be withdrawn. If the request doesn't
+                 * bring the existing funds below 0, it is valid and the request can be fulfilled. If the request
+                 * does bring the funds below 0 it is not completed and the message sent back to the ATM is NFS to
+                 * indicate that the request cannot be performed.
+                 */
                 db_acc = getItem(current_acc.acc_num);
                 if ((db_acc.funds - current_acc.funds) >= 0) {
                     current_acc.funds = db_acc.funds - current_acc.funds;
@@ -383,12 +386,11 @@ int main() {
             pid = fork();
             if (pid < 0) {
                 printf("Error forking\n");
-            } else {
+            } else if (pid == 0){
                 /*
              * This is an UPDATE_DB request from the db editor. We first need to encrypt the user pin before
              * appending the request to the database.
              */
-                printf("update db request being handled \n");
                 int temp_encode = atoi(current_acc.pin) - 1; //encode the pin number
                 char temp[4];
                 sprintf(temp, "%d", temp_encode); //cast pin back to chars
@@ -401,6 +403,14 @@ int main() {
             if (pid < 0){
                 printf("Error forking\n");
             } else if (pid == 0){
+                /*
+                 * this is a transfer funds request, which transfers some amount of money from one account
+                 * to another. The money is taken from the current_acc.acc_num, which is the user accessing the ATM,
+                 * and it is sent to the transfer_acc_num. This function allows a user to go below $0 in funds,
+                 * although we could have implemented a check to prevent this. We decided to allow a user to go negative
+                 * to make use of the functionality in the interestCalculator which calculates the interest of an
+                 * account with funds below 0.
+                 */
                 int semid = semget((key_t) atoi(current_acc.acc_num), 1, 0666 | IPC_CREAT);
                 int semid2 = semget((key_t) atoi(current_acc.transfer_acc_num), 1, 0666 | IPC_CREAT);
                 if (!sp(semid)){
