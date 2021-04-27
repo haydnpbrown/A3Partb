@@ -24,8 +24,16 @@ void appendItem(struct db_item itemToAppend) {
         printf("error opening the db file for appending \n");
         exit(1);
     }
+    //get the entry semaphore before adding it to file
+    int semid = semget((key_t) atoi(itemToAppend.acc_num), 1, 0666 | IPC_CREAT);
+    if (!sp(semid)){
+        exit(EXIT_FAILURE);
+    }
     printf("The entry to append: %s,%s,%.2f \n", itemToAppend.acc_num, itemToAppend.pin, itemToAppend.funds);
     fprintf(dbfile, "%s,%s,%.2f\n", itemToAppend.acc_num, itemToAppend.pin, itemToAppend.funds);
+    if (!sv(semid)){
+        exit(EXIT_FAILURE);
+    }
     fclose(dbfile);
 
     //create semaphore for the new entry
@@ -54,6 +62,10 @@ struct db_item getItem(char *acc) {
     while (fgets(str, 100, dbfile) != NULL) {
         char *token = strtok(str, ",");
         if (strcmp(acc, token) == 0) {
+            int semid = semget((key_t) atoi(token), 1, 0666 | IPC_CREAT);
+            if (!sp(semid)){
+                exit(EXIT_FAILURE);
+            }
             //this entry matches the acc number
             strcpy(temp_item.acc_num, token);
             token = strtok(NULL, ",");
@@ -61,6 +73,9 @@ struct db_item getItem(char *acc) {
             token = strtok(NULL, ",");
             temp_item.funds = atof(token);
             found = 1;
+            if (!sv(semid)){
+                exit(EXIT_FAILURE);
+            }
             break;
         }
     }
@@ -109,6 +124,10 @@ void replaceItem(struct db_item itemToReplace) {
         strcpy(str2, str);
         char *token = strtok(str, ",");
         if (token != NULL) {
+            int semid = semget((key_t) atoi(token), 1, 0666 | IPC_CREAT);
+            if (!sp(semid)){
+                exit(EXIT_FAILURE);
+            }
             printf("the line to check: %s", str2);
             printf("the token to check: %s", token);
             if (strcmp(token, itemToReplace.acc_num) == 0) {
@@ -117,6 +136,9 @@ void replaceItem(struct db_item itemToReplace) {
             } else {
                 //copy the line from old to new file
                 fprintf(dbfile2, "%s\n", str2);
+            }
+            if (!sv(semid)){
+                exit(EXIT_FAILURE);
             }
         }
     }
@@ -160,8 +182,10 @@ void lockAccount(struct db_item itemToLock) {
         strcpy(str2, str);
         char *token = strtok(str, ",");
         if (token != NULL) {
-            printf("the line to check: %s", str2);
-            printf("the token to check: %s", token);
+            int semid = semget((key_t) atoi(token), 1, 0666 | IPC_CREAT);
+            if (!sp(semid)){
+                exit(EXIT_FAILURE);
+            }
             if (strcmp(token, itemToLock.acc_num) == 0) {
                 //this is the line to replace
                 itemToLock.acc_num[0] = 'X';
@@ -169,6 +193,9 @@ void lockAccount(struct db_item itemToLock) {
             } else {
                 //copy the line from old to new file
                 fprintf(dbfile2, "%s\n", str2);
+            }
+            if (!sv(semid)){
+                exit(EXIT_FAILURE);
             }
         }
     }
