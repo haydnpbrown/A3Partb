@@ -11,6 +11,7 @@
 #include <sys/sem.h>
 #include <sys/msg.h>
 #include "struct_types.h"
+#include "semfuncs.h"
 
 #define MAX 256
 
@@ -47,19 +48,12 @@ void replaceItem(struct db_item itemToReplace){
         strcpy(str2, str);
         char *token = strtok(str, ",");
         if (token != NULL){
-            int semid = semget((key_t) atoi(token), 1, 0666 | IPC_CREAT);
-            if (!sp(semid)){
-                exit(EXIT_FAILURE);
-            }
             if (strcmp(token, itemToReplace.acc_num) == 0){
                 //this is the line to replace
                 fprintf(dbfile2, "%s,%s,%.2f\n", itemToReplace.acc_num, itemToReplace.pin, itemToReplace.funds);
             } else {
                 //copy the line from old to new file
                 fprintf(dbfile2, "%s\n", str2);
-            }
-            if (!sv(semid)){
-                exit(EXIT_FAILURE);
             }
         }
     }
@@ -119,7 +113,7 @@ void calculateInterest(){
 
 int main(){
     while(1) {
-        sleep(60);
         calculateInterest();
+        sleep(60);
     }
 }
