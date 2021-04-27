@@ -107,7 +107,7 @@ void calculateInterest(){
 
 int main(){
     while(1) {
-        calculateInterest();
         sleep(60);
+        calculateInterest();
     }
 }
