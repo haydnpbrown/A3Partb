@@ -401,23 +401,12 @@ int main() {
             if (pid < 0){
                 printf("Error forking\n");
             } else if (pid == 0){
-                FILE *dloutput;
-                char *filename = "deadlockoutput.txt";
-                dloutput = fopen(filename, "a");
-                if (dloutput == NULL) {
-                    printf("error opening the dl output file for appending \n");
-                    exit(1);
-                }
                 int semid = semget((key_t) atoi(current_acc.acc_num), 1, 0666 | IPC_CREAT);
                 int semid2 = semget((key_t) atoi(current_acc.transfer_acc_num), 1, 0666 | IPC_CREAT);
-                fprintf(dloutput, "transfer money for atm %ld, from %s to %s\n",current_msg.message_type, current_acc.acc_num, current_acc.transfer_acc_num);
-                fprintf(dloutput, "atm id: %ld is obtaining semaphore: %d\n", current_msg.message_type, semid);
                 if (!sp(semid)){
                     exit(EXIT_FAILURE);
                 }
-                fprintf(dloutput, "semid %d obtained by atm %ld\n", semid, current_msg.message_type);
                 sleep(10);
-                fprintf(dloutput, "atm id: %ld is obtaining semaphore: %d\n", current_msg.message_type, semid2);
                 if (!sp(semid2)){
                     exit(EXIT_FAILURE);
                 }
