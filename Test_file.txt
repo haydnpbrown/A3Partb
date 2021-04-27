@@ -1,0 +1,87 @@
+For the Term Project we completed a. b. c. d. f. (report included) and the bonus functionality.
+
+-Always Start with the INITIAL SETUP below to start the processes before executing a test
+- For a. Running two concurrent ATM process see LINE: 51
+- For b. Running 3 more concurrent ATM process see LINE: 58
+- For c. Running the Interest calculator in included in the INITIAL STARTUP
+- For d. Running the System with a deadlock see LINE: 67
+- For the Bonus functionality we included the report and the Operation is in ATM OPERATIONS -> FOR A TRANSFER, LINE: 36
+
+INITIAL SETUP FOR RUNNING THE SYSTEM:
+Step 1) Open 4 separate Linux Terminals
+Step 2) In the first terminal put ./dbserver to run the DB server (main.c)
+Step 3) In the second terminal put ./dbeditor to run the DB editor (DB_editor.c)
+Step 4) In the third terminal put ./atm to run the the ATM (ATM.c)
+Step 5) In the fourth terminal put ./ic to run the Interest Calculator (Interest_Calculator)
+Step 6) In the window where you started the ATM there will be a prompt to input your account number:
+Input 00001 for the account number *press enter key
+Step 7) Next it will ask for your pin: Input 101 for the pin *press enter key
+Step 8) After that the ATM will ask what operation you want to proceed with. see below for how to proceed with various
+operations
+step 9) See below for DB Editor operation
+
+ATM OPERATIONS:
+FOR A BALANCE CHECK:
+Step 1) If your account number and pin have already been entered go to next step, if not refer to steps 6-7
+Step 2) After the terminal asks what operation for you to perform: Input a 1 for a balance check | *press enter key
+Step 3) Your balance will be printed shortly after to the terminal
+
+FOR A WITHDRAWAL:
+Step 1) If your account number and pin have already been entered go to next step, if not refer to steps 6-7 in
+INITIAL SETUP
+Step 2) After the terminal will ask what operation for you to perform: Input a 2 for a withdrawal | *press enter key
+Step 3) Next the terminal will ask for the amount to withdraw: ENTER AMOUNT (eg. 100) | *press enter key
+Step 4) Your balance after the withdrawal will be print to the terminal shortly after
+
+FOR A TRANSFER:
+Step 1) If your account number and pin have already been entered go to next step, if not refer to steps 6-7 in
+INITIAL SETUP
+Step 2) After the terminal will ask what operation for you to perform: Input a 3 for a Transfer | *press enter key
+Step 3) Next the terminal will ask for the account to send to: ENTER ACCOUNT NUMBER (eg. 00117) | *press enter key
+Step 4) Next the terminal will ask for the amount of money to send: ENTER AMOUNT TO SEND (eg. 100) | *press enter key
+Step 5) Your balance after the money transfer will output in the terminal shortly after
+
+DB Editor Operations:
+TO ADD ACCOUNT:
+Step 1) The terminal will prompt for an account number: ENTER ACCOUNT NUMBER (eg. 54321) | *press enter key
+Step 2) The Terminal will then ask for your desired PIN: ENTER PIN (eg. 678) | *press enter key
+Step 3) The terminal will then ask for your funds: ENTER FUNDS (eg. 1000) | *press enter key
+step 4) reopen/refresh db.txt and the file will be updated with the new account
+
+FOR RUNNING 2 CONCURRENT ATM PROCESSES:
+(This section is used to run two concurrent ATM processes with the system for a. in the term project)
+Step 1) Open another Terminal and call ./atm again (you will now have 2 ATM processes running)
+Step 2) Input 00011 when prompted for the Account number | *press enter key
+Step 3) Input 317 when prompted for the PIN | *press enter key
+Step 4) Refer to ATM OPERATIONS above for further ATM operations
+
+FOR RUNNING 5 CONCURRENT ATM PROCESSES
+(This section is used to run 5 concurrent ATM processes with the system for b. in the term project)
+Step 1) Open 3 more terminals and call ./atm in each of them
+Step 2) Look inside db.txt to and use and input different account number for each new ATM process (eg. 12345)
+| *press enter key
+Step 3) Use the corresponding pin +1 for each of the PINs in the new ATM processes (eg. 311 + 1 -> INPUT 312)
+| *press enter key
+Step 4) Refer to ATM OPERATIONS above for further ATM operations for each process
+
+FOR CREATING A DEADLOCK:
+(this section is used in the case you want to see the deadlock we generated for d. in the term project execute)
+Step 1) Open 3 Terminals
+Step 2) In the first terminal put ./dbserverdeadlock to run the DB server with the deadlock (maindeadlock.c)
+Step 3) In the second terminal put ./atm to run the first ATM process (ATM.c)
+Step 4) In the third terminal put ./atm to run the second ATM process (ATM.c)
+FOR THE FIRST ATM PROCESS:
+Step 5) Input Account number: 00001
+Step 6) Input PIN: 101
+Step 7) STOP AND DO FOLLOW STEPS FOR ATM PROCESS 2 BEFORE INPUTTING AN OPERATION
+FOR THE SECOND ATM PROCESS:
+Step 8) Input Account number: 00117
+Step 9) Input PIN: 152
+Step 10) DONT INPUT AN OPERATION YET
+FOR INPUTTING OPERATIONS:
+Step 11) For the first ATM process input 3 for the operation
+Step 12) For the Second ATM process input 3 for the operation
+Step 13) For the first ATM process input 00117 for the Account to transfer to
+Step 14) For the second ATM process input 00001 for the account to transfer to
+Step 15) For both ATM process input 100 for amount to send (do this step within 10 seconds of each other to generate
+the Deadlock)
