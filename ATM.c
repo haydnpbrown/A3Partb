@@ -9,6 +9,11 @@
 #include <string.h>
 #include "struct_types.h"
 
+/*
+ * The main() executes the interface between the user and the system by inputting the information given
+ * by the user allowing the user to perform operations on there account. All the information gets sent
+ * to the DB server to perform the functionality and echo back the result of the requested operation.
+ */
 int main(int argc, char *argv[]){
 
     int msgqidsend; //id of the outgoing msg queue
